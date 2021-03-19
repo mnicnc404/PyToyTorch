@@ -54,7 +54,7 @@ array([[0.7493436],
 >>> model.backward(grad)
 # optim.update() also cleans grad, so no need to clean grad manually
 >>> optim.update()  
-# see test_with_pytorch.py for training phase example
+# see tests/test_with_pytorch.py for training phase example
 
 
 # if you have pytorch installed:
