@@ -38,6 +38,8 @@ class Sequential(Module):
     def append(self, module):
         assert isinstance(module, Module)
         self.modules.append(module)
+        self.params.extend(module.params)
+        self.grads.extend(module.grads)
 
     def forward(self, x):
         for module in self.modules:

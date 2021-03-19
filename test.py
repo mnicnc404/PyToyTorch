@@ -49,6 +49,8 @@ def main():
         ptt.nn.FC(25, 1),
         ptt.nn.Sigmoid(),
     )
+    ptt_model.append(ptt.nn.FC(1, 1))
+    ptt_model.append(ptt.nn.Sigmoid())
     out = ptt_model(X_eval)
     torch_model = ptt_model.export()
     tout = torch_model(TX_eval)
