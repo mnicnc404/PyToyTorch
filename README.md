@@ -1,11 +1,21 @@
 # PyToyTorch
 
-PyToyTorch, or ptt, a toy neural network framework which depends on numpy.
+PyToyTorch, or ptt, a toy neural network framework which depends merely on numpy.
 
 If you have pytorch installed, you can export ptt model to pytorch model (but no one would do that apparently).
 
 This project is only an exercise. Do not rely this on your project.
 
+
+# Installation
+
+```
+git clone https://github.com/mnicnc404/PyToyTorch.git
+cd PyToyTorch
+python setup.py install
+
+# NOTE: to run test(s) in test/, you shoulf have pytorch and sklearn installed.
+```
 
 # Example
 
