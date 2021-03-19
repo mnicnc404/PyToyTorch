@@ -23,8 +23,14 @@ class Module:
     def __call__(self, x):
         return self.forward(x)
 
-    def export(self):
+    def _export(self):
         raise NotImplementedError
+
+    def export(self):
+        if torch is not None:
+            return self._export()
+        else:
+            raise ValueError("pytorch not imported; not installed?")
 
 
 class Sequential(Module):
@@ -51,8 +57,7 @@ class Sequential(Module):
             d_y = module.backward(d_y)
         return d_y
 
-    def export(self):
-        if torch is not None:
-            return torch.nn.Sequential(
-                *[module.export() for module in self.modules]
-            )
+    def _export(self):
+        return torch.nn.Sequential(
+            *[module.export() for module in self.modules]
+        )

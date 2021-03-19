@@ -20,16 +20,15 @@ class ResFC(Module):
     def backward(self, d_y):
         return d_y + self.fc.backward(d_y)
 
-    def export(self):
-        if torch is not None:
-            class _TorchResFC(torch.nn.Module):
-                def __init__(self, fc):
-                    super().__init__()
-                    self.fc = fc
+    def _export(self):
+        class _TorchResFC(torch.nn.Module):
+            def __init__(self, fc):
+                super().__init__()
+                self.fc = fc
 
-                def forward(self, x):
-                    return x + self.fc(x)
+            def forward(self, x):
+                return x + self.fc(x)
 
-            m_fc = self.fc.export()
-            m = _TorchResFC(m_fc)
-            return m
+        m_fc = self.fc.export()
+        m = _TorchResFC(m_fc)
+        return m

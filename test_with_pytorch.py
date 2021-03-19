@@ -67,6 +67,7 @@ def main():
     t_optim = torch.optim.SGD(torch_model.parameters(), lr, momentum=0.)
     with tqdm(range(1, 1 + n_epoch)) as pbar:
         for e in tqdm(range(1, 1 + n_epoch)):
+            # NOTE: random sample without replacement
             idxs = np.random.choice(X.shape[0], b_size, replace=False)
             batch_x = X[idxs]
             batch_y = Y[idxs]

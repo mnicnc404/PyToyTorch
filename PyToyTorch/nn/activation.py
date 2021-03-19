@@ -51,9 +51,8 @@ class ReLU(BaseActivation):
         res[res <= 0] = 0.
         return res
 
-    def export(self):
-        if torch is not None:
-            return torch.nn.ReLU()
+    def _export(self):
+        return torch.nn.ReLU()
 
 
 class LeakyReLU(BaseActivation):
@@ -71,9 +70,8 @@ class LeakyReLU(BaseActivation):
         res[res <= 0] = self.slope
         return res
 
-    def export(self):
-        if torch is not None:
-            return torch.nn.LeakyReLU(self.slope)
+    def _export(self):
+        return torch.nn.LeakyReLU(self.slope)
 
 
 class Tanh(BaseActivation):
@@ -83,9 +81,8 @@ class Tanh(BaseActivation):
     def d_act(self, x):
         return 1 - np.power(self.saved_output, 2)
 
-    def export(self):
-        if torch is not None:
-            return torch.nn.Tanh()
+    def _export(self):
+        return torch.nn.Tanh()
 
 
 class Sigmoid(BaseActivation):
@@ -95,9 +92,8 @@ class Sigmoid(BaseActivation):
     def d_act(self, x):
         return self.saved_output * (1 - self.saved_output)
 
-    def export(self):
-        if torch is not None:
-            return torch.nn.Sigmoid()
+    def _export(self):
+        return torch.nn.Sigmoid()
 
 
 class Softplus(BaseActivation):
@@ -107,9 +103,8 @@ class Softplus(BaseActivation):
     def d_act(self, x):
         return _sigmoid(x)
 
-    def export(self):
-        if torch is not None:
-            return torch.nn.Softplus()
+    def _export(self):
+        return torch.nn.Softplus()
 
 
 class Mish(BaseActivation):
@@ -121,9 +116,8 @@ class Mish(BaseActivation):
         tanh_s_x = np.tanh(_softplus(x))
         return tanh_s_x + x * (1 - np.power(tanh_s_x, 2)) * _sigmoid(x)
 
-    def export(self):
-        if torch is not None:
-            class _TorchMish(torch.nn.Module):
-                def forward(self, x):
-                    return x * torch.nn.functional.softplus(x).tanh()
-            return _TorchMish()
+    def _export(self):
+        class _TorchMish(torch.nn.Module):
+            def forward(self, x):
+                return x * torch.nn.functional.softplus(x).tanh()
+        return _TorchMish()

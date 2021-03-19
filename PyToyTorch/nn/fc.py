@@ -40,13 +40,12 @@ class FC(Module):
             self.grads[1][:] += d_y.sum(0, keepdims=True)
         return previous_d_y
 
-    def export(self):
+    def _export(self):
         # NOTE: grads are not being copied
-        if torch is not None:
-            in_size, out_size = self.params[0].shape
-            m = torch.nn.Linear(in_size, out_size, self.bias)
-            with torch.no_grad():
-                m.weight.copy_(torch.from_numpy(self.params[0].T))
-                if self.bias:
-                    m.bias.copy_(torch.from_numpy(self.params[1].squeeze(0)))
-            return m
+        in_size, out_size = self.params[0].shape
+        m = torch.nn.Linear(in_size, out_size, self.bias)
+        with torch.no_grad():
+            m.weight.copy_(torch.from_numpy(self.params[0].T))
+            if self.bias:
+                m.bias.copy_(torch.from_numpy(self.params[1].squeeze(0)))
+        return m
