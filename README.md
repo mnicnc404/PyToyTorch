@@ -9,12 +9,18 @@ This project is only an exercise. Do not rely this on your project.
 
 # Installation
 
+### NOTE: to run test(s) in test/, you should have pytorch and sklearn installed.
+
 ```
 git clone https://github.com/mnicnc404/PyToyTorch.git
 cd PyToyTorch
 python setup.py install
+```
 
-# NOTE: to run test(s) in test/, you shoulf have pytorch and sklearn installed.
+or,
+
+```
+pip install git+https://github.com/mnicnc404/PyToyTorch.git
 ```
 
 # Example
