@@ -9,7 +9,7 @@ This project is only an exercise. Do not rely this on your project.
 
 # Installation
 
-### NOTE: to run test(s) in test/, you should have pytorch and sklearn installed.
+### NOTE: to run test(s) in test/, you should have pytorch, tqdm, and sklearn installed.
 
 ```
 git clone https://github.com/mnicnc404/PyToyTorch.git

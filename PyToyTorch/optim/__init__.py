@@ -1,1 +1,4 @@
-from .optim import *
+from .optim import (
+    Optim,
+    SGD,
+)

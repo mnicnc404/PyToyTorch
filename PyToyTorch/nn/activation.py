@@ -2,6 +2,8 @@
 There certainly are several more clever ways to implement backward
 for activations and other basic operators... but the code here
 works anyways
+
+TODO: softmax
 """
 import numpy as np
 try:

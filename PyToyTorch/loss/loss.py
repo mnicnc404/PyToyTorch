@@ -1,10 +1,12 @@
+"""
+TODO: cross entropy for multi class
+"""
 import numpy as np
 
 
 class BaseLoss:
     def __init__(self, reduction='mean'):
-        assert reduction in ('mean', 'sum'), \
-                "assert reduction in (\'mean\', \'sum\')"
+        assert reduction in ('mean', 'sum')
         self.reduction = reduction
 
     def forward(pred, target):
