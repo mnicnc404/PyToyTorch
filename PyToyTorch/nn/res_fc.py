@@ -11,6 +11,8 @@ class ResFC(Module):
     def __init__(self, size):
         # NOTE: input and output should be the same
         self.fc = FC(size, size)
+        self.params = self.fc.params
+        self.grads = self.fc.grads
 
     def forward(self, x):
         return x + self.fc.forward(x)
