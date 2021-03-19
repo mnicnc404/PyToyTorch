@@ -1,5 +1,7 @@
-from .module import Module
-from .fc import FC
+from .module import (
+    Module,
+    Sequential,
+)
 from .activation import (
     BaseActivation,
     ReLU,
@@ -9,3 +11,5 @@ from .activation import (
     Sigmoid,
     Mish,
 )
+from .fc import FC
+from .res_fc import ResFC
