@@ -22,6 +22,7 @@ class ResFC(Module):
         if torch is not None:
             class _TorchResFC(torch.nn.Module):
                 def __init__(self, fc):
+                    super().__init__()
                     self.fc = fc
 
                 def forward(self, x):

@@ -6,10 +6,13 @@ except (ImportError, ModuleNotFoundError):
 
 
 class Module:
+    params = []
+    grads = []
+
     def build_params(self, params):
         self.saved_input = None
-        self.params = tuple(params)
-        self.grads = tuple(np.zeros_like(p) for p in self.params)
+        self.params = list(params)
+        self.grads = list(np.zeros_like(p) for p in self.params)
 
     def forward(self, x):
         raise NotImplementedError
@@ -26,9 +29,14 @@ class Module:
 
 class Sequential(Module):
     def __init__(self, *modules):
+        for module in modules:
+            assert isinstance(module, Module)
         self.modules = list(modules)
+        self.params = [param for m in modules for param in m.params]
+        self.grads = [grad for m in modules for grad in m.grads]
 
     def append(self, module):
+        assert isinstance(module, Module)
         self.modules.append(module)
 
     def forward(self, x):
@@ -37,7 +45,7 @@ class Sequential(Module):
         return x
 
     def backward(self, d_y):
-        for module in self.modules:
+        for module in reversed(self.modules):
             d_y = module.backward(d_y)
         return d_y
 

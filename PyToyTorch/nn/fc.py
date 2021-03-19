@@ -4,7 +4,6 @@ try:
 except (ImportError, ModuleNotFoundError):
     torch = None
 
-
 from .module import Module
 
 
@@ -36,9 +35,9 @@ class FC(Module):
 
     def backward(self, d_y):
         previous_d_y = d_y.dot(self.params[0].T)
-        self.grads[0][:] = self.saved_input.T.dot(d_y)
+        self.grads[0][:] += self.saved_input.T.dot(d_y)
         if self.bias:
-            self.grads[1][:] = d_y.sum(0, keepdims=True)
+            self.grads[1][:] += d_y.sum(0, keepdims=True)
         return previous_d_y
 
     def export(self):
