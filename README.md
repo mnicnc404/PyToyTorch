@@ -25,6 +25,8 @@ pip install git+https://github.com/mnicnc404/PyToyTorch.git
 
 # Example
 
+Here's a minimal example; or you can checkout `example/sklearn_dataset_breast_cancer_example.py`.
+
 
 ```
 >>> import PyToyTorch as ptt
