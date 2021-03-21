@@ -1,4 +1,3 @@
-import torch
 import numpy as np
 import PyToyTorch as ptt
 from sklearn import datasets
@@ -12,15 +11,11 @@ def rmse(x, y):
 def cal_accuracy(scores, Y, threshold=0.5):
     pred = scores > threshold
     same = pred == Y
-    if torch.is_tensor(same):
-        return same.float().mean()
-    else:
-        return same.astype(np.float32).mean()
+    return same.astype(np.float32).mean()
 
 
 def main():
     np.random.seed(7777)
-    torch.manual_seed(7777)
     toy_dataset = datasets.load_breast_cancer()
     X_all = toy_dataset['data'].astype(np.float32)
     X_all = (X_all - X_all.min()) / X_all.max()  # To avoid overflow
@@ -35,8 +30,6 @@ def main():
     X = X_all[~mask]
     Y_eval = Y_all[mask]
     Y = Y_all[~mask]
-    TX_eval = torch.from_numpy(X_eval)
-    TY_eval = torch.from_numpy(Y_eval)
 
     b_size = 8
     n_iter = 2000
@@ -52,19 +45,11 @@ def main():
     ptt_model.append(ptt.nn.FC(1, 1))
     ptt_model.append(ptt.nn.Sigmoid())
     out = ptt_model(X_eval)
-    torch_model = ptt_model.export()
-    tout = torch_model(TX_eval)
     ptt_old_acc = cal_accuracy(out, Y_eval)
-    pytorch_old_acc = cal_accuracy(tout, TY_eval)
     print('ptt eval accuracy before training: {}'.format(ptt_old_acc))
-    print('pytorch eval accuracy before training: {}'.format(
-        pytorch_old_acc))
-    print('output diff: {}'.format(rmse(out, tout.detach().numpy())))
 
     crit = ptt.loss.BCE()
-    t_crit = torch.nn.BCELoss()
     optim = ptt.optim.SGD(ptt_model, lr)
-    t_optim = torch.optim.SGD(torch_model.parameters(), lr, momentum=0.)
     with tqdm(range(1, 1 + n_iter)) as pbar:
         for _ in pbar:
             # NOTE: random sample without replacement
@@ -76,25 +61,12 @@ def main():
             loss_grad = crit.backward(out, batch_y)
             ptt_model.backward(loss_grad)
             optim.update()  # NOTE: grads cleaned here
-            t_batch_x = torch.from_numpy(batch_x)
-            t_batch_y = torch.from_numpy(batch_y)
-            t_out = torch_model(t_batch_x)
-            t_loss = t_crit(t_out, t_batch_y)
-            t_loss.backward()
-            t_optim.step()
-            t_optim.zero_grad()
             pbar.set_postfix(
-                ptt_loss="{:.4f}".format(loss),
-                pytorch_loss="{:.4f}".format(t_loss.item())
+                bce_loss="{:.4f}".format(loss),
             )
     out = ptt_model(X_eval)
-    tout = torch_model(TX_eval)
     ptt_new_acc = cal_accuracy(out, Y_eval)
-    pytorch_new_acc = cal_accuracy(tout, TY_eval)
     print('ptt eval accuracy after training: {}'.format(ptt_new_acc))
-    print('pytorch eval accuracy after training: {}'.format(
-        pytorch_new_acc))
-    print('output diff: {}'.format(rmse(out, tout.detach().numpy())))
 
 
 if __name__ == '__main__':

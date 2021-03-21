@@ -8,9 +8,9 @@ from .fc import FC
 
 
 class ResFC(Module):
-    def __init__(self, size):
+    def __init__(self, size, bias=True):
         # NOTE: input and output should be the same
-        self.fc = FC(size, size)
+        self.fc = FC(size, size, bias)
         self.params = self.fc.params
         self.grads = self.fc.grads
 
